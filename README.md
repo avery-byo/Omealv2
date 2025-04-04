@@ -51,4 +51,41 @@ init(repository: RecipeRepository) {
     self.repository = repository
     fetchRecipes()
 }
+```
+## ⚛️ Reactive Programming
+### What it does:
+- Uses Combine and SwiftUI to update UI automatically when data changes.
+
+### Where it's used:
+```swift
+// MealViewModel.swift
+@Published var meals: [Meal] = []
+@Published var favorites: [FavoriteMeal] = []
+
+repository.fetchMeals()
+    .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] meals in
+        self?.meals = meals
+    })
+    .store(in: &cancellables)
+```
+`RecipesView.swift` reacts to `@Published` values using SwiftUI's data binding system.
+
+## 🔄 SwiftData Integration
+### What it does:
+- Stores user favorites persistently using SwiftData.
+
+### Where it's used:
+```swift
+// MealViewModel.swift
+func toggleFavorite(meal: Meal) {
+    if let existing = favorites.first(where: { $0.id == meal.id }) {
+        context.delete(existing)
+    } else {
+        let favorite = FavoriteMeal(id: meal.id, name: meal.name, thumbnail: meal.thumbnail)
+        context.insert(favorite)
+    }
+    try? context.save()
+    loadFavorites()
+}
+```
 

@@ -13,7 +13,7 @@ struct RecipesView: View {
     @StateObject private var viewModel: RecipeViewModel
     @State private var showFavorites = false
     
-    init(repository: MealRepository) {
+    init(repository: RecipeRepository) {
         _viewModel = StateObject(wrappedValue: RecipeViewModel(repository: repository))
     }
     

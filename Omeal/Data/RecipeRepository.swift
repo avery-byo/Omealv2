@@ -8,17 +8,17 @@
 import Foundation
 import Combine
 
-protocol MealRepository {
-    func fetchMeals() -> AnyPublisher<[Recipe], Error>
+protocol RecipeRepository {
+    func fetchRecipes() -> AnyPublisher<[Recipe], Error>
 }
 
-class MealRepositoryImpl: MealRepository {
-    func fetchMeals() -> AnyPublisher<[Recipe], Error> {
+class MealRepositoryImpl: RecipeRepository {
+    func fetchRecipes() -> AnyPublisher<[Recipe], Error> {
         let url = URL(string: "https://www.themealdb.com/api/json/v1/1/search.php?s=")!
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }
-            .decode(type: MealsResponse.self, decoder: JSONDecoder())
-            .map { $0.meals }
+            .decode(type: RecipesResponse.self, decoder: JSONDecoder())
+            .map { $0.recipes }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

@@ -14,11 +14,11 @@ class RecipeViewModel: ObservableObject {
     @Published var meals: [Recipe] = []
     @Published var favorites: [FavoriteMeal] = []
 
-    private var repository: MealRepository
+    private var repository: RecipeRepository
     private var cancellables: Set<AnyCancellable> = []
     var context: ModelContext? 
 
-    init(repository: MealRepository) {
+    init(repository: RecipeRepository) {
         self.repository = repository
         fetchMeals()
     }
@@ -29,7 +29,7 @@ class RecipeViewModel: ObservableObject {
     }
 
     func fetchMeals() {
-        repository.fetchMeals()
+        repository.fetchRecipes()
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] meals in
                 self?.meals = meals
             })
